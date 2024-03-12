@@ -10,7 +10,7 @@ Shader "Unlit/VergeShader"
     {
         Tags { "RenderType"="Opaque" }
         LOD 100
-        Blend one one
+        
         Pass
         {
             CGPROGRAM
