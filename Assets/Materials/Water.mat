@@ -27,6 +27,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Cube:
+        m_Texture: {fileID: 8900000, guid: 7946a12f02a78b649b307f1b8aec1983, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -63,6 +67,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ReflectionProbe:
+        m_Texture: {fileID: 8900000, guid: 5440ee21890b65f41a2d433e39b125c2, type: 3}
+        m_Scale: {x: 0.63, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
@@ -78,10 +86,11 @@ Material:
     - _NoiseThreshold: 0.81
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Shininess: 1890
+    - _ReflectionLerp: 0
+    - _Shininess: 86
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SpecularStrength: 1
+    - _SpecularStrength: 0.902
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1

@@ -1,17 +1,13 @@
-Shader "Unlit/GrassShader"
+Shader "Unlit/BetterGrassShader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-
         _Color ("BlendColor", Color) = (1,1,1)
         _Intensity ("Intensity", Range(0,1)) = 1
 
         _WindMovement("WindMovement", Range(0,1))= 0
         _WindStrength("Wind strength", Range(0,1 ))= 0
-
-        _UVMapShrink("Shrink value", Range(1,4)) = 1
-        
     }
     SubShader
     {
@@ -24,7 +20,8 @@ Shader "Unlit/GrassShader"
 
         Pass
         {
-//            ZWrite On
+            Tags{"LightMode" = "ForwardBase"}
+            ZWrite On
 //            ZTest Always
             //zwrite og ztest til always kræver en renderqueue til geometry omkring 1999 men så vises en hvid kasse på den ene siden uden for framebuffer
             Blend SrcAlpha OneMinusSrcAlpha
@@ -33,6 +30,7 @@ Shader "Unlit/GrassShader"
             #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
+            #pragma multi_compile_fwdbase
 
 
             #include "UnityCG.cginc"
@@ -57,7 +55,7 @@ Shader "Unlit/GrassShader"
             float _Intensity;
             float _WindStrength;
             float _WindMovement;
-            float _UVMapShrink;
+        
             
 
             v2f vert(appdata v)
@@ -67,12 +65,10 @@ Shader "Unlit/GrassShader"
                 //worldspace matrix
                 float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
                 
-                //texture map position to move with a 0-1 value multiplied with time
-                //xy to make it seem a bit more wavy than just through x or y
-                float2 uv = worldPos * _WindMovement * _Time.xy;
+                float2 uv = worldPos * _WindMovement * _Time;
 
                 //sample texturemap, frac removes all but the last decimal values
-                float2 displacement = tex2Dlod(_MainTex, float4(frac(uv.x), frac(uv.y), 0, 0));
+                float2 displacement = tex2Dlod(_MainTex, float4(frac(uv.x), frac(uv.y), frac(worldPos.z), frac(worldPos.w)));
                 displacement -= 0.5;
                 displacement *= _WindStrength;
 
@@ -82,11 +78,11 @@ Shader "Unlit/GrassShader"
 
                 worldPos = lerp(modifiedWPos, worldPos, uvY);
 
-
+                
                 //multiply the view projection with the position
                 o.vertex = mul(UNITY_MATRIX_VP, worldPos);
                 //downscale the uv map
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex) / _UVMapShrink;
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex) ;
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
@@ -171,6 +167,6 @@ Shader "Unlit/GrassShader"
 
 
     }
-//    Fallback "Diffuse"
+    Fallback "Diffuse"
 
 }
