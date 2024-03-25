@@ -16,8 +16,6 @@ Shader "Unlit/BetterGrassShader"
             "RenderType"="Opaque" "Queue" = "Transparent" 
         }
         LOD 100
-
-
         Pass
         {
             Tags{"LightMode" = "ForwardBase"}
@@ -81,7 +79,6 @@ Shader "Unlit/BetterGrassShader"
                 
                 //multiply the view projection with the position
                 o.vertex = mul(UNITY_MATRIX_VP, worldPos);
-                //downscale the uv map
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex) ;
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
@@ -89,13 +86,9 @@ Shader "Unlit/BetterGrassShader"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-
-            
                 col *= _Color * _Intensity;
-
-                // apply fog
+                
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
             }
@@ -107,8 +100,6 @@ Shader "Unlit/BetterGrassShader"
         }
         pass
         {
-
-
             Name "ShadowCaster"
             Tags
             {
@@ -155,17 +146,11 @@ Shader "Unlit/BetterGrassShader"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                fixed4 texColor = tex2D(_MainTex, i.uv);
                 fixed4 shadow = SHADOW_ATTENUATION(i);
-
-                
                 return shadow;
             }
             ENDCG
-
         }
-
-
     }
     Fallback "Diffuse"
 
